@@ -2,10 +2,19 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+
+// Configuración explícita de CORS
+app.use(
+  cors({
+    origin: "*", // Permite peticiones desde cualquier origen (incluyendo Vercel)
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.use(express.json());
 
-// Ruta raíz de bienvenida (evita el "Cannot GET /")
+// Ruta raíz
 app.get("/", (req, res) => {
   res.json({ mensaje: "API de Tareas activa 🚀", endpoint: "/api/tareas" });
 });
@@ -49,7 +58,6 @@ app.delete("/api/tareas/:id", (req, res) => {
   res.status(204).send();
 });
 
-// Usar el puerto que asigna Render o el 3001 localmente
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`API corriendo en el puerto ${PORT}`);
