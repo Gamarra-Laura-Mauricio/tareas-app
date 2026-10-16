@@ -5,7 +5,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Datos en memoria (luego los cambias por una base de datos)
+// Ruta raíz de bienvenida (evita el "Cannot GET /")
+app.get("/", (req, res) => {
+  res.json({ mensaje: "API de Tareas activa 🚀", endpoint: "/api/tareas" });
+});
+
+// Datos en memoria
 let tareas = [
   { id: 1, titulo: "Aprender React", completada: false },
   { id: 2, titulo: "Conectar con Node.js", completada: false },
@@ -44,6 +49,8 @@ app.delete("/api/tareas/:id", (req, res) => {
   res.status(204).send();
 });
 
-app.listen(3001, () => {
-  console.log("API corriendo en http://localhost:3001");
+// Usar el puerto que asigna Render o el 3001 localmente
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`API corriendo en el puerto ${PORT}`);
 });
